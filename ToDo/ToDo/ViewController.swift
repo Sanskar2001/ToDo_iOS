@@ -128,7 +128,29 @@ extension ViewController{
         
         let predicate=NSPredicate(format: "title CONTAINS %@", searchBar.text!)
         
-        print(searchBar.text!)
+        request.predicate=predicate
+        let sortDescriptor=NSSortDescriptor(key:"title",ascending: true)
         
+        do{
+            itemArray=try context.fetch(request)
+        }catch{
+            print(error)
+        }
+        tableView.reloadData()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count==0{
+            
+          
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+                self.loadItems()
+                self.tableView.reloadData()
+            }
+           
+        }
+            
+            
     }
 }
